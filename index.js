@@ -5,7 +5,7 @@ var path = require('path');
 var fs = require('fs');
 var Module = require('module');
 
-var getFile = require('amd-tools/modules/getFile');
+var resolve = require('amd-tools/modules/resolve');
 var getConfigRecursive = require('amd-tools/getConfigRecursive');
 
 
@@ -31,7 +31,7 @@ var augmentRequireWithAmd = function(rjsconfig) {
 			return _resolveFilename.apply(this, arguments);
 		}
 
-		var filename = getFile(request, dirname, rjsconfig);
+		var filename = resolve(request, dirname, rjsconfig);
 		if (filename) {
 			return filename;
 		}
