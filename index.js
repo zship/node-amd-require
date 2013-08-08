@@ -9,25 +9,37 @@ var resolve = require('amd-tools/modules/resolve');
 var getConfigRecursive = require('amd-tools/getConfigRecursive');
 
 
-var _isInProject = function(filename) {
-	return (
+var _paths = [];
+var _shouldTransform = function(filename) {
+	var isInPathsConfig = _paths.some(function(p) {
+		return filename.indexOf(p) !== -1;
+	});
+	var isWithinProject = (
 		filename.indexOf(path.resolve('.')) !== -1 &&
 		filename.indexOf(path.resolve('node_modules')) === -1
 	);
+	return isInPathsConfig || isWithinProject;
 };
 
 
 var augmentRequireWithAmd = function(rjsconfig) {
-	rjsconfig = rjsconfig || {
-		baseUrl: process.cwd()
-	};
-
 	rjsconfig = getConfigRecursive(rjsconfig);
+	rjsconfig.baseUrl = rjsconfig.baseUrl || process.cwd();
+	rjsconfig.paths = rjsconfig.paths || {};
+
+	_paths = Object.keys(rjsconfig.paths).map(function(key) {
+		return path.resolve(rjsconfig.baseUrl, rjsconfig.paths[key]);
+	});
 
 	var _resolveFilename = Module._resolveFilename;
 	Module._resolveFilename = function(request, parent) {
+		if (request === 'node-amd-require-amdefine') {
+			// use our copy of amdefine
+			return require.resolve('amdefine');
+		}
+
 		var dirname = path.dirname(parent.filename);
-		if (!_isInProject(dirname)) {
+		if (!_shouldTransform(dirname)) {
 			return _resolveFilename.apply(this, arguments);
 		}
 
@@ -41,12 +53,12 @@ var augmentRequireWithAmd = function(rjsconfig) {
 
 	var _extensionsJs = require.extensions['.js'];
 	require.extensions['.js'] = function(localModule, filename) {
-		if (!_isInProject(filename)) {
+		if (!_shouldTransform(filename)) {
 			return _extensionsJs.apply(this, arguments);
 		}
 
 		var contents = fs.readFileSync(filename, 'utf8');
-		contents = 'if (typeof define !== "function") { var define = require("amdefine")(module); }\n\n' + contents;
+		contents = 'if (typeof define !== "function") { var define = require("node-amd-require-amdefine")(module); }\n\n' + contents;
 		localModule._compile(contents, filename);
 	};
 
