@@ -55,7 +55,7 @@ var augmentRequireWithAmd = function(rjsconfig) {
 		}
 
 		var contents = fs.readFileSync(filename, 'utf8');
-		contents = 'if (typeof define !== "function") { var define = require("node-amd-require-amdefine")(module); }\n\n' + contents;
+		contents = 'if (typeof define !== "function") { var define = require("node-amd-require-amdefine")(module); } ' + contents;
 		localModule._compile(contents, filename);
 	};
 
