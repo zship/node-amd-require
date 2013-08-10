@@ -74,10 +74,9 @@ Features
   requirejs
   issue](https://github.com/jrburke/requirejs/issues/450#issuecomment-8465160).
 * Does not clobber external libraries (symlinks too)
-  * AMD-style path resolution only happens when `require` is called **from**
-	your project
-  * `define` (AMD module support) is only added when `require` is called **to**
-	your project (any file calls `require("/file/inside/your/project.js"))
+  * That is, `define` (AMD module support) is only added when `require` is
+	called **into** your project (any file calls
+	`require("/file/inside/your/project.js"))
 
 
 License

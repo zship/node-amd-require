@@ -39,16 +39,13 @@ var augmentRequireWithAmd = function(rjsconfig) {
 		}
 
 		var dirname = path.dirname(parent.filename);
-		if (!_shouldTransform(dirname)) {
-			return _resolveFilename.apply(this, arguments);
-		}
-
 		var filename = resolve(request, dirname, rjsconfig);
-		if (filename) {
-			return filename;
+
+		if (!filename) {
+			filename = _resolveFilename.apply(this, arguments);
 		}
 
-		return _resolveFilename.apply(this, arguments);
+		return filename;
 	};
 
 	var _extensionsJs = require.extensions['.js'];
