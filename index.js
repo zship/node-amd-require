@@ -55,10 +55,24 @@ var augmentRequireWithAmd = function(rjsconfig) {
 		}
 
 		var contents = fs.readFileSync(filename, 'utf8');
-		contents = 'if (typeof define !== "function") { var define = require("node-amd-require-amdefine")(module); } ' + contents;
+		contents = 'if (typeof define !== "function") { var define = require("node-amd-require-amdefine")(module); require.nodeRequire = require; } ' + contents;
 		localModule._compile(contents, filename);
 	};
 
+};
+
+
+augmentRequireWithAmd.save = function() {
+	return {
+		resolveFilename: Module._resolveFilename,
+		extension: require.extensions['.js']
+	};
+};
+
+
+augmentRequireWithAmd.restore = function(state) {
+	Module._resolveFilename = state.resolveFilename;
+	require.extensions['.js'] = state.extension;
 };
 
 
