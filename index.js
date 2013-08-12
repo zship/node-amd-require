@@ -39,7 +39,7 @@ var augmentRequireWithAmd = function(rjsconfig) {
 		}
 
 		var dirname = path.dirname(parent.filename);
-		var filename = resolve(request, dirname, rjsconfig);
+		var filename = resolve(rjsconfig, dirname, request);
 
 		if (!filename) {
 			filename = _resolveFilename.apply(this, arguments);
