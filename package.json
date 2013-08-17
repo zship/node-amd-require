@@ -1,7 +1,7 @@
 {
 	"name": "node-amd-require",
 	"description": "Augment node's require() to globally handle AMD modules",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"homepage": "https://github.com/zship/node-amd-require",
 	"author": "Zach Shipley <zach@zachshipley.com>",
 	"repository": {
@@ -10,7 +10,7 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"amd-tools": "1.x",
+		"libamd": "1.x",
 		"amdefine": "0.x"
 	},
 	"keywords": [

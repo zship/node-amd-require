@@ -5,8 +5,8 @@ var path = require('path');
 var fs = require('fs');
 var Module = require('module');
 
-var resolve = require('amd-tools/modules/resolve');
-var getConfigRecursive = require('amd-tools/getConfigRecursive');
+var resolve = require('libamd/modules/resolve');
+var getConfigRecursive = require('libamd/getConfigRecursive');
 
 
 var _paths = [];
